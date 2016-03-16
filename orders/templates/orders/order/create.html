@@ -1,0 +1,31 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h1>Please fill form</h1>
+<div class="row">
+<div class="col-sm-12">
+    <ul>
+    {% for item in cart %}
+        <li>
+            {{ item.quantity }}x {{ item.product.name }}
+            <span><b>${{ item.total_price }}</b></span>
+        </li>
+        {% endfor %}
+
+    </ul>
+
+    <h4 style="color:#C71585;">Total: ${{ cart.get_total_price }}</h4>
+</div>
+    </div>
+
+<div class="row">
+<div class="col-sm-4 col-sm-offset-3">
+<form action="." method="post" class="order-form">
+{{ form|crispy }}
+<p><input type="submit" value="Place order" style="margin-left:505px;"></p>
+{% csrf_token %}
+</form>
+    </div>
+  </div>
+{% endblock %}

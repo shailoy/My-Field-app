@@ -1,0 +1,297 @@
+{% extends "shop/base.html" %}
+{% load staticfiles %}
+{% block title %}
+{% if category %}{{ category.title }}{% else %}Explore-Geo{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<!--=========Detail view of the Field trip(images)=========-->
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-8" style="border: 1px solid #e3e3e3;">
+                    <ul class='tabs'>
+                        <li><a href='#tab1'><b>Description</b></a></li>
+                        <li><a href='#tab2'><b>Feed Back</b></a></li>
+                        <li><a href='#tab3'><b>Gallery</b></a></li>
+                        <li><a href='#tab4'><b>About Instructor</b></a></li>
+                        <li><a href='#tab5'><b>Contact us</b></a></li>
+
+                    </ul>
+            <!--========================Description of Field trip start here (Text)=====================-->
+                <div id='tab1'>
+        		    <div class="description">
+                        <h2>
+                            <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a>
+                        </h2>
+                        <h1>
+                            {{ product.name }}
+                        </h1>
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">{% csrf_token %}
+
+
+        </form>
+
+            <b>Description:</b>{{ product.description|linebreaks }}
+    </div>
+    </div>
+        <!--=====================Description of Field trip Ends here (Text)=====================-->
+
+        <!--============================Feedback starts here====================-->
+		<div id='tab2'>
+		 <h1 style="color:green;">
+            Feed Back
+        </h1>
+            {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h2>
+            {% endwith %}
+        {% for comment in comments %}
+
+            <div class="comment">
+                <h3 class="info">
+                    Comment {{ forloop.counter }} by {{ comment.name }}
+                    {{ comment.created }}
+                </h3>
+                    {{ comment.body|linebreaks }}
+            </div>
+                    {% empty %}
+            <p>
+                There are no comments yet.
+            </p>
+        {% endfor %}
+        {% if new_comment %}
+        <h2>
+            Your comment has been added.
+        </h2>
+        {% else %}
+
+        <h2>
+            Add a new comment
+        </h2>
+                <div style="=margin-left:100px;">
+                     <button type="button" id="show" class="btn btn-primary">Show comment Box</button>
+                    <button type="button" id="hide" class="btn btn-danger">Hide comment Box</button>
+
+                </div><br>
+                    <div id="hideform">
+
+                        <form action="." method="post" >
+                            {{ comment_form.as_p }}
+                                {% csrf_token %}
+                                    <p style="text-align:center;">
+                                            <input type="submit" value="Add comment">
+                                    </p>
+                        </form>
+                    </div>
+            {% endif %}
+                <br>
+
+            </div>
+
+<!--=========================Gallery starts here ===================>>>
+        <!--====images==============-->
+	<div id='tab3'>
+                <div class="carousel slide article-slide img-responsive" id="article-photo-carousel">
+                                 <!-- Wrapper for slides -->
+                     <div class="carousel-inner cont-slider">
+                         <div class="item active">
+                                <img   src="{% if product.image %}{{ product.image.url }}{% else %}
+                                  {% static 'img/no_image.png' %}{% endif %}"height="400" width="600" >
+                         </div>
+                        <div class="item">
+                                <img   src="{% if product.image1 %}{{ product.image1.url }}{% else %}
+                                {% static 'img/no_image.png' %}{% endif %}"height="400" width="600">
+                        </div>
+                        <div class="item">
+                                <img   src="{% if product.image1 %}{{ product.image1.url }}{% else %}
+                                {% static 'img/no_image.png' %}{% endif %}"height="400" width="600">
+                        </div>
+
+                    </div>
+                                <!-- Indicators -->
+                      <ol class="carousel-indicators">
+                        <li class="active" data-slide-to="0" data-target="#article-photo-carousel">
+                          <img   src="{% if product.image %}{{ product.image.url }}{% else %}
+                          {% static 'img/no_image.png' %}{% endif %}"height="50" width="50" >
+                        </li>
+                        <li class="" data-slide-to="1" data-target="#article-photo-carousel">
+                            <img   src="{% if product.image1 %}{{ product.image.url }}{% else %}
+                            {% static 'img/no_image.png' %}{% endif %}"height="50" width="50" >
+                        </li>
+                        <li class="" data-slide-to="2" data-target="#article-photo-carousel">
+                            <img   src="{% if product.image2 %}{{ product.image.url }}{% else %}
+                            {% static 'img/no_image.png' %}{% endif %}"height="50" width="50" >
+                      </ol>
+                </div>
+                        <script>$('.carousel').carousel({interval: 3000});</script>
+
+    </div>
+  <!--=====================About instructer==============================-->
+        <div id='tab4'>
+
+        </div>
+
+<!--=====================contact us==============================-->
+<div id='tab5'>
+
+   <form action="{% url 'cart:cart_add' product.id %}" method="post">{% csrf_token %}
+<input type="submit" value="  Book  ">
+<b>Number of People</b>:{{ cart_product_form }}<br>
+        <b>Location:</b>{{product.location}}<br>
+        <b>Basin:</b>{{product.basin}}<br>
+
+
+</form>
+
+
+
+
+    </div>
+
+
+</div>
+
+<!--=====================Side bar advertisement collapsible panel with no css and javascript(only html works fine)==========-->
+
+<div class="col-md-4">
+
+        <div class="container" style="width:100%;">
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Pricing</a>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse in">
+                <div class="panel-body">${{product.price}}/person.</div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Maximum number of people</a>
+                </h4>
+              </div>
+              <div id="collapse2" class="panel-collapse collapse">
+                <div class="panel-body">{{product.stock}}.</div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Information about local area</a>
+                </h4>
+              </div>
+              <div id="collapse3" class="panel-collapse collapse">
+                <div class="panel-body">Comming soon......</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+</div><br>
+    <!-- container -->
+<!--=====================MAp ==============================-->
+            <script
+                    src="http://maps.googleapis.com/maps/api/js">
+            </script>
+
+            <script>
+                    var myCenter=new google.maps.LatLng(51.508742,-0.120850);
+                    var marker;
+
+                    function initialize()
+                    {
+                    var mapProp = {
+                      center:myCenter,
+                      zoom:5,
+                      mapTypeId:google.maps.MapTypeId.ROADMAP
+                      };
+
+                    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+                    var marker=new google.maps.Marker({
+                      position:myCenter,
+                      animation:google.maps.Animation.BOUNCE
+                      });
+
+                    marker.setMap(map);
+                    }
+
+                    google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
+
+            <div id="googleMap" class="pull-right" style="width:400px;height:280px;"></div>
+
+
+
+</div>
+           </div>
+    </div>
+	<!--=============================Scripts=================---->
+
+<!--=============Jquery script for tabs=========-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script>
+			// Wait until the DOM has loaded before querying the document (For detail page tabls)
+			$(document).ready(function(){
+				$('ul.tabs').each(function(){
+					// For each set of tabs, we want to keep track of
+					// which tab is active and its associated content
+					var $active, $content, $links = $(this).find('a');
+
+					// If the location.hash matches one of the links, use that as the active tab.
+					// If no match is found, use the first link as the initial active tab.
+					$active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+					$active.addClass('active');
+
+					$content = $($active[0].hash);
+
+					// Hide the remaining content
+					$links.not($active).each(function () {
+						$(this.hash).hide();
+					});
+
+					// Bind the click event handler
+					$(this).on('click', 'a', function(e){
+						// Make the old tab inactive.
+						$active.removeClass('active');
+						$content.hide();
+
+						// Update the variables with the new link and content
+						$active = $(this);
+						$content = $(this.hash);
+
+						// Make the tab active.
+						$active.addClass('active');
+						$content.show();
+
+						// Prevent the anchor's default click action
+						e.preventDefault();
+					});
+				});
+			});
+		</script>
+
+
+<script>
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("#hideform").hide();
+    });
+    $("#show").click(function(){
+        $("#hideform").show();
+    });
+});
+</script>
+
+<!--===Google map script===-->
+
+
+
+
+{% endblock %}
