@@ -3,6 +3,7 @@ from .models import Category, Product
 from cart.forms import CartAddProductForm
 from .forms import CommentForm
 
+
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()

@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'cart',
     'orders',
     'crispy_forms',
+
 )
 CRISPY_TEMPLATE_PACK='bootstrap3'
 MIDDLEWARE_CLASSES = (

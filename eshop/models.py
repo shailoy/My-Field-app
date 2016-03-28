@@ -36,6 +36,11 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    Auth_name = models.CharField(max_length=200, db_index=True, blank=True)
+    Auth_description = models.TextField(blank=True)
+    long = models.CharField(max_length=200, db_index=True, blank=True)
+    lat = models.CharField(max_length=200, db_index=True, blank=True)
+
     thumbnail=models.FileField(upload_to=get_upload_file,blank=False)
 
 
